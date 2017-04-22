@@ -1,0 +1,25 @@
+{
+    "mongo": {
+        "host": "localhost",
+        "port": 27017,
+        "db": "recipes"
+    },
+    "collector": {
+        "store_fields": [
+            "name",
+            "author",
+            "image",
+            "datePublished",
+            "totalTime",
+            "prepTime",
+            "cookTime",
+            "recipeYield",
+            "recipeIngredient",
+            "recipeInstructions",
+            "cookingMethod",
+            "recipeCategory",
+            "recipeCuisine"
+        ],
+        "required_fields": [ "name", "recipeIngredient" ]
+    }
+}

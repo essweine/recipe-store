@@ -1,0 +1,4 @@
+lxml == 3.7.*
+requests == 2.13.*
+pymongo == 3.4.*
+#tornado == 4.5.*
