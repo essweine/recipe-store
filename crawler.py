@@ -60,7 +60,10 @@ def main(args):
     profile.collection = collection
     profile.wait = args.wait
 
-    links = profile.generate_links(*args.profile_args)
+    if args.link_file is None:
+        links = profile.generate_links(*args.profile_args)
+    else:
+        links = [ url.strip() for url in open(args.link_file) ]
 
     coll = Collector(collection, links, profile.site_profile, 
                     store_fields = config["collector"]["store_fields"],
@@ -83,6 +86,8 @@ if __name__ == "__main__":
                         help = "use profile for %(metavar)s")
     collect.add_argument("-a", "--profile-args", metavar = "ARGS", dest = "profile_args", nargs = "*",
                         help = "pass %(metavar)s to link generation function")
+    collect.add_argument("-o", "--link-file", metavar = "FILE", dest = "link_file", default = None,
+                        help = "use list of urls in %(metavar)s instead of link generation function")
     collect.add_argument("-m", "--mongo-collection", metavar = "COLLECTION", dest = "collection", default = None,
                         help = "store recipes in mongo collection %(metavar)s [default: <profile name>]")
     collect.add_argument("-c", "--config", metavar = "FILE", dest = "config", default = "config.json",

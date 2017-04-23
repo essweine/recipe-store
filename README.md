@@ -10,6 +10,9 @@ store the field values.
 It also contains a utility for building a profile based on a url containing a
 recipe.  Unfortunately, you are on your own for a link generation function.
 
+You can, however, override use of a link generation function by providing a
+file containing a list of urls to check (one url per line).
+
 Eventually I will write utilities for doing something with the recipes.
 
 ## Profiles
