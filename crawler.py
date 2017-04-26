@@ -65,7 +65,7 @@ def main(args):
     else:
         links = [ url.strip() for url in open(args.link_file) ]
 
-    coll = Collector(collection, links, profile.site_profile, 
+    coll = Collector(collection, links, profile.site_profile,
                     store_fields = config["collector"]["store_fields"],
                     required_fields = config["collector"]["required_fields"],
                     link_depth = args.depth, pause = args.wait)
@@ -77,14 +77,14 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description = "recipe collection utility")
     subparsers = parser.add_subparsers(help = "subcommands", dest = "subcommand")
-    
+
     build = subparsers.add_parser("build", help = "attempt to build a profile for site")
     build.add_argument("url", metavar = "URL", help = "attempt to build a profile based on %(metavar)s")
 
     collect = subparsers.add_parser("collect", help = "collect recipes based on a profile")
     collect.add_argument("-p", "--profile", metavar = "SOURCE", dest = "profile", required = True,
                         help = "use profile for %(metavar)s")
-    collect.add_argument("-a", "--profile-args", metavar = "ARGS", dest = "profile_args", nargs = "*",
+    collect.add_argument("-a", "--profile-args", metavar = "ARGS", dest = "profile_args", nargs = "*", default=[],
                         help = "pass %(metavar)s to link generation function")
     collect.add_argument("-o", "--link-file", metavar = "FILE", dest = "link_file", default = None,
                         help = "use list of urls in %(metavar)s instead of link generation function")
@@ -109,4 +109,3 @@ if __name__ == "__main__":
     except:
         sys.__stderr__.write(traceback.format_exc())
         sys.exit(1)
-
