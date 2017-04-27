@@ -8,10 +8,11 @@ logger = logging.getLogger(__name__)
 
 site_profile = {
     "base_url": "http://www.saveur.com",
+    "link_prefix": "http://www.saveur.com",
     "extract_method": "RDFa",
 }
 
-# Finished page 74, 76, 140, 142+
+# Finished page 88, 133+
 def generate_links(first_page, last_page):
 
     api_url = "http://www.saveur.com/sites/all/modules/bonnier/search_hubs/includes/search_hubs_solr.inc.php"

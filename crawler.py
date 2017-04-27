@@ -84,7 +84,7 @@ if __name__ == "__main__":
     collect = subparsers.add_parser("collect", help = "collect recipes based on a profile")
     collect.add_argument("-p", "--profile", metavar = "SOURCE", dest = "profile", required = True,
                         help = "use profile for %(metavar)s")
-    collect.add_argument("-a", "--profile-args", metavar = "ARGS", dest = "profile_args", nargs = "*",
+    collect.add_argument("-a", "--profile-args", metavar = "ARGS", dest = "profile_args", nargs = "*", default = [ ],
                         help = "pass %(metavar)s to link generation function")
     collect.add_argument("-o", "--link-file", metavar = "FILE", dest = "link_file", default = None,
                         help = "use list of urls in %(metavar)s instead of link generation function")
