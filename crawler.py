@@ -65,7 +65,7 @@ def main(args):
     else:
         links = [ url.strip() for url in open(args.link_file) ]
 
-    coll = Collector(collection, links, profile.site_profile, 
+    coll = Collector(collection, links, profile.site_profile,
                     store_fields = config["collector"]["store_fields"],
                     required_fields = config["collector"]["required_fields"],
                     link_depth = args.depth, pause = args.wait)
@@ -77,7 +77,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description = "recipe collection utility")
     subparsers = parser.add_subparsers(help = "subcommands", dest = "subcommand")
-    
+
     build = subparsers.add_parser("build", help = "attempt to build a profile for site")
     build.add_argument("url", metavar = "URL", help = "attempt to build a profile based on %(metavar)s")
 
@@ -109,4 +109,3 @@ if __name__ == "__main__":
     except:
         sys.__stderr__.write(traceback.format_exc())
         sys.exit(1)
-

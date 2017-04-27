@@ -2,6 +2,12 @@
 
 Retrieve recipes from cooking sites and store them in a mongo database.
 
+## Setup
+
+You must have Python 2.7, [pip](https://pip.pypa.io/en/stable/installing/), and [MongoDB 3.4](https://www.mongodb.com/) installed.
+
+1. From terminal, in project, enter: `pip install -r requirements.txt` (you may need to use `sudo`)
+
 ## General collection options
 
 This program uses http://schema.org/Recipe to parse the recipes and selectively
@@ -27,13 +33,25 @@ collection available to the profile when it is loaded.
 #### Bon Appetit
 
 Arguments are first issue date and last issue date to collect recipes from
-(inclusive).  The date format is yyyy-mm-dd.
+(inclusive).  The date format is `yyyy-mm-dd`.
+
+Example:
+
+```sh
+$ ./crawler.py collect -p bonappetit -a 2017-01-01 2017-01-01
+```
 
 #### Gourmet
 
 Epicurious has an archive of recipes from Gourmet, organized by page.  Arguments
-to the link generator are first and last page (inclusive).  There are 1136 pages,
+to the link generator are first and last page (inclusive) and the link depth.  There are 1136 pages,
 with 10 recipes per page.
+
+Example, to fetch recipes from the first two pages:
+
+```sh
+$ ./crawler.py collect -p gourmet -a 1 2 -d 1
+```
 
 #### New York Times
 
@@ -42,7 +60,72 @@ cooking.nytimes.com is always added to the returned list of links, and this can
 be augmented by specifying the size of a random sample of previously collected
 articles.  You must change the link depth to at least 1 to get any new results.
 
+To seed your database:
+
+```sh
+$ ./crawler.py collect -p nyt -d 1
+```
+
+After downloading some data, you can crawl these recipes to expand your collection:
+
+```sh
+$ ./crawler.py collect -p nyt -a 5 -d 1
+```
+
 #### Saveur
 
-Saveur organizes their recipes by page.  Arguments are first and last page to 
+Saveur organizes their recipes by page.  Arguments are first and last page to
 retrieve (inclusive).  At the time of this writing, there are 153 pages.
+
+Example:
+
+```sh
+$ ./crawler.py collect -p saveur -a 1 3
+```
+
+## Viewing recipes
+
+To start MongoDB shell:
+
+```sh
+$ mongo
+```
+
+Verify you have the recipes database:
+
+```sh
+> show dbs
+...
+recipes  0.000GB
+```
+
+Select the `recipes` database and view available collections:
+
+```sh
+> use recipes
+switched to db recipes
+> show collections
+bonappetit
+gourmet
+nyt
+saveur
+>
+```
+
+To view a random recipe:
+
+```sh
+> db.bonappetit.findOne()
+```
+
+You can use `col.find()`, you must first setup a text index:
+
+```sh
+> db.bonappetit.createIndex({ name: "text", recipeIngredient: "text", instructions: "text"})
+```
+
+Then:
+
+```sh
+> db.bonappetit.find({ '$text': { '$search': 'granola'}})
+```
