@@ -206,6 +206,10 @@ class RecipeSearch(Cmd):
         except Exception as exc:
             raise
 
+        if values["total"] == 0:
+            sys.__stdout__.write("No results!\n")
+            return
+
         fl = FieldList(self.lines, self.line_length, values, field)
         fl.cmdloop()
 
@@ -295,8 +299,23 @@ class RecipeSearch(Cmd):
 
         sys.__stdout__.write("%d\n" % self.mgr.count())
 
+    def do_width(self, w):
+        """
+        Set the screen width to <n>.
+        """
+
+        try:
+            ncols = int(w.strip())
+        except Exception as exc:
+            sys.__stderr__.write("Invalid width\n")
+            return
+
+        self.line_length = ncols
+
     def do_quit(self, args):
-        """Quit this program."""
+        """
+        Quit this program.
+        """
 
         return True
 
