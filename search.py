@@ -238,6 +238,8 @@ class RecipeSearch(Cmd):
         param, values = m.groups()
         if "," in values:
             values = [ val.strip() for val in values.split(",") ]
+        elif param in [ "recipeCategory", "recipeCuisine" ]:
+            values = [ values ]
 
         if param not in [ "recipeCategory", "recipeCuisine", "operator" ]:
             sys.__stderr__.write("Invalid parameter\n")
@@ -368,7 +370,9 @@ if __name__ == "__main__":
 
     try:
         main(args)
-    except:
+    except SystemExit:
+        sys.exit(0)
+    except Exception as exc:
         sys.__stderr__.write(traceback.format_exc())
         sys.exit(1)
 
