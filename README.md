@@ -4,10 +4,9 @@ Retrieve recipes from cooking sites and store them in a mongo database.
 
 ## Setup
 
-You must have Python 2.7, [pip](https://pip.pypa.io/en/stable/installing/) and [MongoDB 3.4](https://www.mongodb.com/) installed.
+You must have Python 2.7, [pip](https://pip.pypa.io/en/stable/installing/), and [MongoDB 3.4](https://www.mongodb.com/) installed.
 
-1. From terminal, in project, enter: `pip install -r requirements.txt`
-    * You may need to run `sudo pip install -r requirements.txt` (e.g., OS X)
+1. From terminal, in project, enter: `pip install -r requirements.txt` (you may need to use `sudo`)
 
 ## General collection options
 
@@ -34,7 +33,7 @@ collection available to the profile when it is loaded.
 #### Bon Appetit
 
 Arguments are first issue date and last issue date to collect recipes from
-(inclusive).  The date format is yyyy-mm-dd.
+(inclusive).  The date format is `yyyy-mm-dd`.
 
 Example:
 
@@ -51,7 +50,7 @@ with 10 recipes per page.
 Example, to fetch recipes from the first two pages:
 
 ```sh
-./crawler.py collect -p gourmet -a 1 2 -d 1
+$ ./crawler.py collect -p gourmet -a 1 2 -d 1
 ```
 
 #### New York Times
@@ -64,7 +63,7 @@ articles.  You must change the link depth to at least 1 to get any new results.
 To seed your database:
 
 ```sh
-./crawler.py collect -p nyt -d 1
+$ ./crawler.py collect -p nyt -d 1
 ```
 
 After downloading some data, you can crawl these recipes to expand your collection:
@@ -89,7 +88,7 @@ $ ./crawler.py collect -p saveur -a 1 3
 To start MongoDB shell:
 
 ```sh
-mongo
+$ mongo
 ```
 
 Verify you have the recipes database:
