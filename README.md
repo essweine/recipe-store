@@ -19,8 +19,6 @@ recipe.  Unfortunately, you are on your own for a link generation function.
 You can, however, override use of a link generation function by providing a
 file containing a list of urls to check (one url per line).
 
-Eventually I will write utilities for doing something with the recipes.
-
 ## Profiles
 
 A profile module must contain a site_profile dictionary of parameters and a link
@@ -33,19 +31,20 @@ collection available to the profile when it is loaded.
 #### Bon Appetit
 
 Arguments are first issue date and last issue date to collect recipes from
-(inclusive).  The date format is `yyyy-mm-dd`.
+(inclusive).  The date format is `yyyy-mm-dd`.  To retrieve one page, omit
+the second argument.
 
 Example:
 
 ```sh
-$ ./crawler.py collect -p bonappetit -a 2017-01-01 2017-01-01
+$ ./crawler.py collect -p bonappetit -a 2017-01-01
 ```
 
 #### Gourmet
 
 Epicurious has an archive of recipes from Gourmet, organized by page.  Arguments
-to the link generator are first and last page (inclusive) and the link depth.  There are 1136 pages,
-with 10 recipes per page.
+to the link generator are first and last page (inclusive) and the link depth.
+There are 1136 pages, with 10 recipes per page.
 
 Example, to fetch recipes from the first two pages:
 
@@ -75,7 +74,8 @@ $ ./crawler.py collect -p nyt -a 5 -d 1
 #### Saveur
 
 Saveur organizes their recipes by page.  Arguments are first and last page to
-retrieve (inclusive).  At the time of this writing, there are 153 pages.
+retrieve (inclusive).  The second argument can be omitted to retrieve only one
+page.  At the time of this writing, there are 153 pages.
 
 Example:
 
@@ -84,6 +84,22 @@ $ ./crawler.py collect -p saveur -a 1 3
 ```
 
 ## Viewing recipes
+
+### Using the command line utility
+
+A simple command line utility for interacting with the collection is available.
+It is mostly self documenting.  The only required option is the name of the
+recipe collection in mongo.
+
+Example:
+
+```sh
+./search.py -m saveur
+```
+
+In the shell, type ```help``` to see available commands.
+
+### Using Mongo
 
 To start MongoDB shell:
 
