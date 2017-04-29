@@ -137,6 +137,21 @@ class Manager(object):
         else:
             return { op: conditions }
 
+    def create_index(self, fields):
+        """
+        Create an index on the specified fields, with the specified ordering.  Fields should
+        be a list of tuples.
+        """
+
+        order = {
+            "asc": pymongo.ASCENDING,
+            "ascending": pymongo.ASCENDING,
+            "desc": pymongo.DESCENDING,
+            "descending": pymongo.DESCENDING,
+        }
+        args = [ (field, order[val]) for field in fields ]
+        return self.collection.create_index(args)
+
     def create_default_text_index(self):
         """Set up an index on the name, ingredients, and instructions."""
 
@@ -144,7 +159,7 @@ class Manager(object):
         weights = { "name": 3, "recipeIngredient": 2, "recipeInstructions": 1 }
         self.create_text_index(fields, "recipe_text", "en", weights)
 
-    def create_text_index(self, fields, name, default_language = "none", weights = { }):
+    def create_text_index(self, fields, name = "text_index", default_language = "none", weights = { }):
         """Create a text index on the collection."""
 
         weights.update(dict([ (f, 1) for f in fields if f not in weights ]))
@@ -161,6 +176,11 @@ class Manager(object):
         """Return a list of indexes on the collection."""
 
         return self.collection.index_information()
+
+    def drop_index(self, index):
+        """Drop and index from the collection."""
+
+        return self.collection.drop_index(index)
 
     def convert_duration(self, duration):
         """Convert ISO duration to something more readable.  For display purposes."""
