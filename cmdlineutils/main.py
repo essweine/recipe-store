@@ -78,6 +78,20 @@ class RecipeUtil(RecipeUtilBase, object):
 
         self.stdout.write("%d\n" % self.mgr.count())
 
+    def do_sample(self, size):
+
+        if size == "":
+            size = 1
+        try:
+            size = int(size.strip())
+        except:
+            self.stderr.write("Size must be a number")
+            return
+
+        recipes = self.mgr.sample(size)
+        rl = RecipeList(self.lines, self.line_length, recipes, self.mgr)
+        rl.cmdloop()
+
     def do_params(self, param):
         """
         Display search constraints.

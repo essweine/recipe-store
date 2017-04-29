@@ -64,6 +64,22 @@ class Manager(object):
             results["total"] += 1
         return results
 
+    def sample(self, size, projection = DEFAULT_PROJECTION, sort = DEFAULT_SORT):
+        """
+        Extract a random set of recipes.
+        """
+
+        args = [ { "$sample": { "size": size } }, 
+                 { "$project": projection }, 
+                 { "$sort": dict(sort) }, ]
+
+        results = { "objects": [ ], "total": 0 }
+        for rcp in self.collection.aggregate(args):
+            self.serialize_recipe(rcp)
+            results["objects"].append(rcp)
+            results["total"] += 1
+        return results
+
     def search(self, text = "", **kwargs):
         """
         Construct and perform a mongo query.
@@ -120,10 +136,7 @@ class Manager(object):
 
         results = { "objects": [ ], "total": 0 }
         for rcp in self.collection.find(query, projection, sort = sort):
-            for field in [ "totalTime", "cookTime", "prepTime" ]:
-                duration = rcp.get(field, None)
-                if duration:
-                    rcp[field] = self.convert_duration(duration)
+            self.serialize_recipe(rcp)
             results["objects"].append(rcp)
             results["total"] += 1
         return results
@@ -167,7 +180,6 @@ class Manager(object):
 
         weights.update(dict([ (f, 1) for f in fields if f not in weights ]))
 
-        # name, recipeIngredient, recipeInstructions
         return self.collection.create_index(
             [ (field, pymongo.TEXT) for field in fields ],
             name = name, 
@@ -196,6 +208,13 @@ class Manager(object):
         """Drop and index from the collection."""
 
         return self.collection.drop_index(index)
+
+    def serialize_recipe(self, recipe):
+
+        for field in [ "totalTime", "cookTime", "prepTime" ]:
+            duration = recipe.get(field, None)
+            if duration:
+                recipe[field] = self.convert_duration(duration)
 
     def convert_duration(self, duration):
         """Convert ISO duration to something more readable.  For display purposes."""
