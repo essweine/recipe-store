@@ -12,8 +12,11 @@ site_profile = {
     "extract_method": "RDFa",
 }
 
-# Finished page 88, 133+
-def generate_links(first_page, last_page):
+# Finished page 89, 91, 93, 133+
+def generate_links(first_page, last_page = None):
+
+    if last_page is None:
+        last_page = first_page
 
     api_url = "http://www.saveur.com/sites/all/modules/bonnier/search_hubs/includes/search_hubs_solr.inc.php"
     api_params = [ ['filters[filter0][filterType]', 'categories'], ['filters[filter0][filterNum]', '0'],

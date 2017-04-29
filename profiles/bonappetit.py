@@ -13,7 +13,10 @@ site_profile = {
     "extract_method": "json-ld",
 }
 
-def generate_links(first_issue, last_issue):
+def generate_links(first_issue, last_issue = None):
+
+    if last_issue is None:
+        last_issue = first_issue
 
     links = [ ]
     api_url = "http://www.bonappetit.com/api/search"
