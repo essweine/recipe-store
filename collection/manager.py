@@ -137,7 +137,7 @@ class Manager(object):
         else:
             return { op: conditions }
 
-    def create_index(self, fields):
+    def create_index(self, fields, name = None):
         """
         Create an index on the specified fields, with the specified ordering.  Fields should
         be a list of tuples.
@@ -149,8 +149,11 @@ class Manager(object):
             "desc": pymongo.DESCENDING,
             "descending": pymongo.DESCENDING,
         }
-        args = [ (field, order[val]) for field in fields ]
-        return self.collection.create_index(args)
+        args = [ (field, order[val]) for field, val in fields ]
+        if name is not None:
+            return self.collection.create_index(args, name = name)
+        else:
+            return self.collection.create_index(args)
 
     def create_default_text_index(self):
         """Set up an index on the name, ingredients, and instructions."""
@@ -175,7 +178,19 @@ class Manager(object):
     def list_indexes(self):
         """Return a list of indexes on the collection."""
 
-        return self.collection.index_information()
+        indexes = { }
+        for name, info in self.collection.index_information().iteritems():
+
+            if "textIndexVersion" in info:
+                idx_type = "text: %s" % info["default_language"]
+                fields = ", ".join([ "%s:%.1f" % (k, w) for k, w in info["weights"].iteritems() ])
+            else:
+                idx_type = "fields"
+                fields = ", ".join([ "%s:%s" % (k, "asc" if o == 1 else "desc") for k, o in info["key"] ])
+
+            indexes[name] = { "type": idx_type, "fields": fields  }
+
+        return indexes
 
     def drop_index(self, index):
         """Drop and index from the collection."""

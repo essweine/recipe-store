@@ -1,15 +1,12 @@
-import sys, traceback
-from cmd import Cmd
-from pager import Pager
+from base import RecipeUtilPager
 
 from collection.manager import RECIPE_PROJECTION, RECIPE_INFO_PROJECTION
 
-class RecipeList(Pager):
+class RecipeList(RecipeUtilPager, object):
 
     def __init__(self, lines, line_length, recipes, mgr):
 
-        Cmd.__init__(self)
-        Pager.__init__(self, lines, line_length, recipes["total"])
+        super(RecipeList, self).__init__(lines, line_length, recipes["total"])
         self.recipes = recipes
         self.mgr = mgr
         self.prompt = "recipes (page %d of %d): " % (1, self.last_page)
@@ -23,11 +20,11 @@ class RecipeList(Pager):
         try:
             recipe = int(num.strip()) - 1
         except Exception as exc:
-            sys.__stderr__.write("Invalid recipe number!\n")
+            self.stderr.write("Invalid recipe number!\n")
             return
 
         if recipe < 0 or recipe >= len(self.recipes["objects"]):
-            sys.__stderr__.write("Invalid recipe number!\n")
+            self.stderr.write("Invalid recipe number!\n")
             return
 
         try:
@@ -36,23 +33,22 @@ class RecipeList(Pager):
             if len(rcp) == 0:
                 raise Exception("No recipes found!")
         except Exception as exc:
-            sys.__stderr__.write("Recipe could not be retrieved!\n")
-            sys.__stderr__.write(traceback.format_exc())
+            self.stderr.write("Recipe could not be retrieved!\n")
             return
 
         rcp = rcp["objects"][0]
-        sys.__stdout__.write("\n%s\n\n" % rcp["name"])
+        self.stdout.write("\n%s\n\n" % rcp["name"])
         for field, text in zip([ "recipeYield", "totalTime", "prepTime", "cookTime" ],
                                [ "Yield", "Total time", "Prep time", "Cooking time" ]):
             if field in rcp:
-                sys.__stdout__.write("%s: %s\n" % (text, rcp[field]))
-        sys.__stdout__.write("\n")
+                self.stdout.write("%s: %s\n" % (text, rcp[field]))
+        self.stdout.write("\n")
 
         for ingredient in rcp["recipeIngredient"]:
-            sys.__stdout__.write("%s\n" % ingredient)
-        sys.__stdout__.write("\n")
+            self.stdout.write("%s\n" % ingredient)
+        self.stdout.write("\n")
         for instruction in rcp["recipeInstructions"]:
-            sys.__stdout__.write("%s\n\n" % self.line_breaks(instruction))
+            self.stdout.write("%s\n\n" % self.line_breaks(instruction))
 
     def line_breaks(self, text):
 
@@ -75,15 +71,15 @@ class RecipeList(Pager):
         try:
             super(RecipeList, self).display_page(page)
         except Exception as exc:
-            sys.__stderr__.write("%s\n" % str(exc))
+            self.stderr.write("%s\n" % str(exc))
             return
 
         first, last = page * self.lines, min([ (page + 1) * self.lines, len(self.recipes["objects"]) ])
         current = first
-        sys.__stdout__.write("\n")
+        self.stdout.write("\n")
         for rcp in self.recipes["objects"][first:last]:
             current += 1
-            sys.__stdout__.write("  %4d. %s\n" % (current, rcp["name"]) )
-        sys.__stdout__.write("\n")
+            self.stdout.write("  %4d. %s\n" % (current, rcp["name"]) )
+        self.stdout.write("\n")
         self.prompt = "recipes (page %d of %d): " % (page + 1, self.last_page)
 

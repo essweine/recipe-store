@@ -1,18 +1,20 @@
 #!/usr/bin/env python
 
-import sys, re
-from cmd import Cmd
+import re, sys
 from math import ceil
 
 from collection import manager
-from field_list import FieldList
-from recipe_list import RecipeList
 
-class RecipeSearch(Cmd, object):
+from base import RecipeUtilBase
+from fields import FieldList
+from recipes import RecipeList
+from admin import RecipeAdmin
+
+class RecipeUtil(RecipeUtilBase, object):
 
     def __init__(self, mgr, nrows, ncols):
 
-        Cmd.__init__(self)
+        super(RecipeUtil, self).__init__()
         self.mgr = mgr
         self.nrows = nrows
         self.lines = nrows - 4
@@ -37,72 +39,11 @@ class RecipeSearch(Cmd, object):
             raise
 
         if values["total"] == 0:
-            sys.__stdout__.write("No results!\n")
+            self.stdout.write("No results!\n")
             return
 
         fl = FieldList(self.lines, self.line_length, values, field)
         fl.cmdloop()
-
-    def do_params(self, param):
-        """
-        Display search constraints.
-        """
-
-        if param and param not in self.params:
-            sys.__stderr__.write("Invalid parameter\n")
-            return
-        elif param:
-            sys.__stdout__.write("%s = %s\n" % (param, self.search_params[param]))
-        else:
-            for param in self.search_params:
-                sys.__stdout__.write("%s = %s\n" % (param, self.search_params[param]))
-
-    def do_set(self, args):
-        """
-        Set search constraints.
-        Syntax is param_name = param_value(s); use a comma-separated list for multiple
-        Valid parameters are recipeCategory, recipeCuisine, operator
-        Valid operators are all (= boolean and), any (= boolean or)
-        """
-        m = re.match("(\w+)\s*=\s*(.*)", args.strip())
-        if not m:
-            sys.__stderr__.write("Unable to parse arguments\n")
-            return
-
-        param, values = m.groups()
-        if "," in values:
-            values = [ val.strip() for val in values.split(",") ]
-        elif param in [ "recipeCategory", "recipeCuisine" ]:
-            values = [ values ]
-
-        if param not in [ "recipeCategory", "recipeCuisine", "operator" ]:
-            sys.__stderr__.write("Invalid parameter\n")
-            return
-
-        if param == "operator" and values not in [ "any", "all" ]:
-            sys.__stderr__.write("Invalid operator\n")
-            return
-
-        self.search_params[param] = values
-
-    def do_reset(self, param):
-        """
-        Reset search constraints.
-        """
-
-        if param and param not in self.params:
-            sys.__stderr__.write("Invalid parameter\n")
-            return
-        elif param in [ "recipeCategory", "recipeCuisine" ]:
-            self.search_params[param] = [ ]
-        elif param == "operator":
-            self.search_params[param] = "all"
-        else:
-            self.search_params = {
-                "recipeCategory": [ ],
-                "recipeCuisine": [ ],
-                "operator": "all",
-            }
 
     def do_search(self, text):
         """
@@ -116,18 +57,89 @@ class RecipeSearch(Cmd, object):
                 op = "$and" if self.search_params["operator"] == "all" else "$or"
         )
         if recipes["total"] == 0:
-            sys.__stdout__.write("No results!\n")
+            self.stdout.write("No results!\n")
             return
 
         rl = RecipeList(self.lines, self.line_length, recipes, self.mgr)
         rl.cmdloop()
+
+    def do_admin(self, args):
+        """
+        Basic administration for the collection.
+        """
+
+        admin = RecipeAdmin(self.mgr)
+        admin.cmdloop()
 
     def do_count(self, args):
         """
         Display total number of recipe in this collection.
         """
 
-        sys.__stdout__.write("%d\n" % self.mgr.count())
+        self.stdout.write("%d\n" % self.mgr.count())
+
+    def do_params(self, param):
+        """
+        Display search constraints.
+        """
+
+        if param and param not in self.search_params:
+            self.stderr.write("Invalid parameter\n")
+            return
+        elif param:
+            self.stdout.write("\n%s = %s\n\n" % (param, self.search_params[param]))
+        else:
+            self.stdout.write("\n")
+            for param in self.search_params:
+                self.stdout.write("%s = %s\n" % (param, self.search_params[param]))
+            self.stdout.write("\n")
+
+    def do_set(self, args):
+        """
+        Set search constraints.
+        Syntax is param_name=param_value(s); use a comma-separated list for multiple
+        Valid parameters are recipeCategory, recipeCuisine, operator
+        Valid operators are all (= boolean and), any (= boolean or)
+        """
+        m = re.match("(\w+)\s*=\s*(.*)", args.strip())
+        if not m:
+            self.stderr.write("Unable to parse arguments\n")
+            return
+
+        param, values = m.groups()
+        if "," in values:
+            values = [ val.strip() for val in values.split(",") ]
+        elif param in [ "recipeCategory", "recipeCuisine" ]:
+            values = [ values ]
+
+        if param not in [ "recipeCategory", "recipeCuisine", "operator" ]:
+            self.stderr.write("Invalid parameter\n")
+            return
+
+        if param == "operator" and values not in [ "any", "all" ]:
+            self.stderr.write("Invalid operator\n")
+            return
+
+        self.search_params[param] = values
+
+    def do_reset(self, param):
+        """
+        Reset search constraints.
+        """
+
+        if param and param not in self.params:
+            self.stderr.write("Invalid parameter\n")
+            return
+        elif param in [ "recipeCategory", "recipeCuisine" ]:
+            self.search_params[param] = [ ]
+        elif param == "operator":
+            self.search_params[param] = "all"
+        else:
+            self.search_params = {
+                "recipeCategory": [ ],
+                "recipeCuisine": [ ],
+                "operator": "all",
+            }
 
     def do_width(self, w):
         """
@@ -137,16 +149,9 @@ class RecipeSearch(Cmd, object):
         try:
             ncols = int(w.strip())
         except Exception as exc:
-            sys.__stderr__.write("Invalid width\n")
+            self.stderr.write("Invalid width\n")
             return
 
         self.line_length = ncols
-
-    def do_quit(self, args):
-        """
-        Quit this program.
-        """
-
-        return True
 
 

@@ -4,13 +4,11 @@ import argparse
 import sys, traceback, logging
 import re, json
 from math import ceil
-from cmd import Cmd
-import readline
 
 from pymongo import MongoClient
 
 from collection import manager
-from search_util.recipe_search import RecipeSearch
+from cmdlineutils import RecipeUtil
 
 def init_logging(args):
 
@@ -61,7 +59,7 @@ def main(args):
         else:
             logger.warn("Unable to parse screen dimensions!")
 
-    top = RecipeSearch(mgr, nrows, ncols)
+    top = RecipeUtil(mgr, nrows, ncols)
     top.cmdloop("Command line recipe search utility.\nType help for more info.\n")
 
 if __name__ == "__main__":
