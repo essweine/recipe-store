@@ -9,11 +9,6 @@ class RecipeUtilBase(Cmd, object):
         Cmd.__init__(self)
         self.stderr = sys.stderr
 
-    def do_parse(self, args):
-
-        params = self.parse_args(args)
-        self.stdout.write("\n%s\n" % params)
-
     def parse_args(self, args, arg_types = { }):
 
         lex = shlex.shlex(args, posix = True)

@@ -78,6 +78,18 @@ class RecipeUtil(RecipeUtilBase, object):
 
         self.stdout.write("%d\n" % self.mgr.count())
 
+    def do_stats(self, args):
+        """
+        Display information about fields used in this collection.
+        """
+
+        self.stdout.write("\n")
+        self.stdout.write("Total recipes: %d\n" % self.mgr.count())
+        self.stdout.write("\n")
+        for field, count in sorted(self.mgr.field_info().iteritems(), key = lambda v: v[0]):
+            self.stdout.write("%-25s%d\n" % (field, count))
+        self.stdout.write("\n")
+
     def do_sample(self, size):
 
         if size == "":

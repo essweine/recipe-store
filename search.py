@@ -41,7 +41,9 @@ def main(args):
     logger.debug("Configuration initialized")
 
     try:
-        mgr = manager.Manager(config["mongo"], args.collection)
+        mgr = manager.Manager(config["mongo"], 
+                              args.collection, 
+                              config["collector"]["store_fields"])
     except Exception as exc:
         raise
 

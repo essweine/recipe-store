@@ -29,7 +29,7 @@ TEXT_SCORE_SORT = [ ("score", { "$meta": "textScore" }) ]
 
 class Manager(object):
 
-    def __init__(self, mongo_config, collection):
+    def __init__(self, mongo_config, collection, store_fields):
 
         try:
             client = pymongo.MongoClient(host = mongo_config["host"], port = mongo_config["port"])
@@ -37,6 +37,7 @@ class Manager(object):
             self.collection = db[collection]
         except Exception as exc:
             raise
+        self.store_fields = store_fields
         self.logger = logging.getLogger(__name__)
  
     def count(self): return self.collection.count()
@@ -64,8 +65,11 @@ class Manager(object):
             results["total"] += 1
         return results
 
-    def field_info(self, fields):
+    def field_info(self, fields = [ ]):
         """Get recipe counts for each of the supplied fields."""
+
+        if len(fields) == 0:
+            fields = self.store_fields
 
         results = { }
         for field in fields:
