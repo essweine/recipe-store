@@ -250,10 +250,18 @@ class Collector(object):
         """Check for missing fields."""
 
         self.logger.debug("Validating %s" % record["url"])
+
+        # Remove empty fields
+        for field in record.keys():
+            if record[field] in [ None, "", [ ], { } ]:
+                del record[field]
+
+        # Check for missing fields
         missing = [ field for field in self.required_fields if field not in record.keys() ]
         if len(missing) > 0:
             self.logger.warn("recipe in %s: missing %s" % (record["url"], ", ".join(missing)))
             return False
+
         return True
 
     def extract_attribute(self, property, attributes, data):
