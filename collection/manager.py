@@ -64,6 +64,14 @@ class Manager(object):
             results["total"] += 1
         return results
 
+    def field_info(self, fields):
+        """Get recipe counts for each of the supplied fields."""
+
+        results = { }
+        for field in fields:
+            results[field] = self.collection.find({ field: { "$exists": True } }).count()
+        return results
+
     def sample(self, size, projection = DEFAULT_PROJECTION, sort = DEFAULT_SORT):
         """
         Extract a random set of recipes.
