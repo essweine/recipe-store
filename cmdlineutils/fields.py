@@ -5,7 +5,6 @@ class FieldList(RecipeUtilPager, object):
     def __init__(self, lines, line_length, values, field):
 
         super(FieldList, self).__init__(lines, line_length, values["total"])
-        print dir(self)
         self.values = values
         self.field = field
         self.prompt = "viewing %s (page %d of %d): " % (field, 1, self.last_page)
