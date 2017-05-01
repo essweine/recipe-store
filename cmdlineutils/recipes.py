@@ -44,11 +44,16 @@ class RecipeList(RecipeUtilPager, object):
                 self.stdout.write("%s: %s\n" % (text, rcp[field]))
         self.stdout.write("\n")
 
-        for ingredient in rcp["recipeIngredient"]:
-            self.stdout.write("%s\n" % ingredient)
+        if "recipeIngredient" in rcp:
+            for ingredient in rcp["recipeIngredient"]:
+                self.stdout.write("%s\n" % ingredient)
+                self.stdout.write("\n")
+
+        if "recipeInstructions" in rcp:
+            for instruction in rcp["recipeInstructions"]:
+                self.stdout.write("%s\n" % self.line_breaks(instruction))
+
         self.stdout.write("\n")
-        for instruction in rcp["recipeInstructions"]:
-            self.stdout.write("%s\n\n" % self.line_breaks(instruction))
 
     def line_breaks(self, text):
 
