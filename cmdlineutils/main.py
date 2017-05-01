@@ -91,13 +91,14 @@ class RecipeUtil(RecipeUtilBase, object):
         self.stdout.write("\n")
 
     def do_sample(self, size):
+        """
+        Display a random sample of <n> recipes.
+        """
 
-        if size == "":
-            size = 1
         try:
             size = int(size.strip())
         except:
-            self.stderr.write("Size must be a number")
+            self.stderr.write("Size must be a number\n")
             return
 
         recipes = self.mgr.sample(size)
