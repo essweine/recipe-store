@@ -66,8 +66,8 @@ class RecipeList(RecipeUtilPager, object):
                 length += len(word) + 1
             else:
                 lines.append(current)
-                current = [ ]
-                length = 0
+                current = [ word ]
+                length = len(word)
         lines.append(current)
         return "\n".join([ " ".join(line) for line in lines ])
 
