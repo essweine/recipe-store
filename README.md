@@ -83,6 +83,21 @@ Example:
 $ ./crawler.py collect -p saveur -a 1 3
 ```
 
+### Creating a profile
+
+Use the ```build``` option to attempt to discover how a site formats their
+recipes and what fields they present by checking a sample URL.  Sometimes fields 
+fall outside a Recipe scope.  The collector will first try to find it in the scope 
+and fallback to anywhere in the document but the profile builder only looks in the 
+scope, so the available field list generated with this command might not be 
+exhaustive.
+
+Example:
+
+```
+./crawler.py build http://www.saveur.com/flaky-honey-butter-biscuit-recipe
+```
+
 ## Viewing recipes
 
 ### Using the command line utility
