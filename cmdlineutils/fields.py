@@ -38,11 +38,11 @@ class FieldList(RecipeUtilPager, object):
             return
 
         if field not in [ "value", "count" ]:
-            self.stderr.write("Invalid option: %s!\n" %s)
+            self.stderr.write("Invalid option: %s!\n" % field)
             return
 
         if order not in [ "asc", "ascending", "desc", "descending" ]:
-            self.stderr.write("Invalid option: %s!\n" %s)
+            self.stderr.write("Invalid option: %s!\n" % order)
             return
 
         self.values["objects"] = sorted(self.values["objects"], key = lambda obj: obj[field])
