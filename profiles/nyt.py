@@ -1,6 +1,7 @@
 # Settings for NYT
 
 site_profile = {
+    "display_name": "New York Times",
     "base_url": "http://cooking.nytimes.com",
     "link_prefix": "http://cooking.nytimes.com/recipes",
     "extract_method": "microdata",

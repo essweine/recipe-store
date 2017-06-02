@@ -7,12 +7,12 @@ from urllib import quote
 logger = logging.getLogger(__name__)
 
 site_profile = {
+    "display_name": "Saveur",
     "base_url": "http://www.saveur.com",
     "link_prefix": "http://www.saveur.com",
     "extract_method": "RDFa",
 }
 
-# Finished page 89, 91, 93, 133+
 def generate_links(first_page, last_page = None):
 
     if last_page is None:

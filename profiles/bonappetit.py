@@ -8,6 +8,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 site_profile = {
+    "display_name": "Bon Appetit",
     "base_url": "http://www.bonappetit.com",
     "link_prefix": "http://www.bonappetit.com/recipe/",
     "extract_method": "json-ld",
@@ -36,13 +37,13 @@ def generate_links(first_issue, last_issue = None):
                 break
 
             logger.info("Got page %d" % pg)
-            if pg * js["query"]["size"] < js["hits"]["total"]:
+            if pg * int(js["query"]["size"]) < js["numFound"]:
                 pg += 1
             else:
                 next_pg = False
 
-            for hit in js["hits"]["hits"]:
-                url = "%s/%s" % (site_profile["base_url"], hit["_source"]["url"])
+            for item in js["items"]:
+                url = "%s%s" % (site_profile["base_url"], item["url"])
                 links.append(url)
 
             time.sleep(wait)

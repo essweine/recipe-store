@@ -1,6 +1,7 @@
 # Settings for Gourmet
 
 site_profile = {
+    "display_name": "Gourmet",
     "base_url": "http://www.epicurious.com",
     "link_prefix": "http://www.epicurious.com/recipes/food/views/(?!0)",
     "extract_method": "microdata",
