@@ -7,8 +7,8 @@ from math import ceil
 
 from pymongo import MongoClient
 
-from collection import manager
-from cmdlineutils import RecipeUtil
+from application.collection import manager
+from application.cmdlineutils import RecipeUtil
 
 def init_logging(args):
 

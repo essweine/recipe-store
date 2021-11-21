@@ -1,6 +1,6 @@
 import requests, time
 import json, re
-from urlparse import urlparse, urljoin
+from urllib.parse import urlparse, urljoin
 from lxml import html
 
 class ProfileBuilder(object):

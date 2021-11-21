@@ -4,8 +4,8 @@ import argparse, logging, importlib, json
 import sys, traceback
 from pymongo import MongoClient
 
-from collection.collector import Collector
-from collection.profile_builder import ProfileBuilder
+from application.collection.collector import Collector
+from application.collection.profile_builder import ProfileBuilder
 
 def init_logging(args):
 

@@ -1,7 +1,7 @@
 import re
 import traceback
 
-from base import RecipeUtilBase
+from .base import RecipeUtilBase
 
 class RecipeAdmin(RecipeUtilBase, object):
 
@@ -64,7 +64,7 @@ class RecipeAdmin(RecipeUtilBase, object):
         try:
             self.stdout.write("Total recipes %d\n" % self.mgr.count())
             self.stdout.write("\nIndex Information\n")
-            for name, index in self.mgr.list_indexes().iteritems():
+            for name, index in self.mgr.list_indexes().items():
                 self.stdout.write("%-18s %-12s %s\n" % (name, index["type"], index["fields"]))
             self.stdout.write("\n")
         except Exception as exc:

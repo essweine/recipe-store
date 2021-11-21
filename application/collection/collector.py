@@ -1,6 +1,6 @@
 import requests, json, re
 from requests import HTTPError, Timeout
-from urlparse import urljoin
+from urllib.parse import urljoin
 import logging, time
 from datetime import datetime
 from lxml import html
@@ -164,7 +164,7 @@ class Collector(object):
                     if update_existing:
                         updates = record
                     else:
-                        updates = dict([ (k, v) for k, v in record.iteritems() if k not in existing ])
+                        updates = dict([ (k, v) for k, v in record.items() if k not in existing ])
                     updates["update_time"] = datetime.utcnow()
                     self.collection.update_one({ "url": url }, { "$set": updates })
                 except Exception as exc:
@@ -201,7 +201,7 @@ class Collector(object):
             if not isinstance(data, dict):
                 continue
 
-            record = dict([ (k, v) for k, v in data.iteritems() if k in self.store_fields ])
+            record = dict([ (k, v) for k, v in data.items() if k in self.store_fields ])
             if "recipeIngredient" not in record and "ingredients" in data:
                 record["recipeIngredient"] = data["ingredients"]
 
@@ -237,7 +237,7 @@ class Collector(object):
             if not record["recipeIngredient"]:
                 record["recipeIngredient"] = self.extract_list("ingredients", rcp)
 
-            record = dict([ (k, v) for k, v in record.iteritems() if k in self.store_fields ])
+            record = dict([ (k, v) for k, v in record.items() if k in self.store_fields ])
             record["url"] = url
             record["collect_time"] = datetime.utcnow()
 

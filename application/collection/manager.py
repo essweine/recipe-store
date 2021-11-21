@@ -203,11 +203,11 @@ class Manager(object):
         """Return a list of indexes on the collection."""
 
         indexes = { }
-        for name, info in self.collection.index_information().iteritems():
+        for name, info in self.collection.index_information().items():
 
             if "textIndexVersion" in info:
                 idx_type = "text: %s" % info["default_language"]
-                fields = ", ".join([ "%s:%.1f" % (k, w) for k, w in info["weights"].iteritems() ])
+                fields = ", ".join([ "%s:%.1f" % (k, w) for k, w in info["weights"].items() ])
             else:
                 idx_type = "fields"
                 fields = ", ".join([ "%s:%s" % (k, "asc" if o == 1 else "desc") for k, o in info["key"] ])

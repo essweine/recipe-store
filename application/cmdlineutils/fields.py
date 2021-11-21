@@ -1,4 +1,4 @@
-from base import RecipeUtilPager
+from .base import RecipeUtilPager
 
 class FieldList(RecipeUtilPager, object):
 

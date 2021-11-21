@@ -3,14 +3,14 @@
 import re, sys
 from math import ceil
 
-from collection import manager
+from ..collection import manager
 
-from base import RecipeUtilBase
-from fields import FieldList
-from recipes import RecipeList
-from admin import RecipeAdmin
+from .base import RecipeUtilBase
+from .fields import FieldList
+from .recipes import RecipeList
+from .admin import RecipeAdmin
 
-class RecipeUtil(RecipeUtilBase, object):
+class RecipeUtil(RecipeUtilBase):
 
     def __init__(self, mgr, nrows, ncols):
 
@@ -86,7 +86,7 @@ class RecipeUtil(RecipeUtilBase, object):
         self.stdout.write("\n")
         self.stdout.write("Total recipes: %d\n" % self.mgr.count())
         self.stdout.write("\n")
-        for field, count in sorted(self.mgr.field_info().iteritems(), key = lambda v: v[0]):
+        for field, count in sorted(self.mgr.field_info().items(), key = lambda v: v[0]):
             self.stdout.write("%-25s%d\n" % (field, count))
         self.stdout.write("\n")
 

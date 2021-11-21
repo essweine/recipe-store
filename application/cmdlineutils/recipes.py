@@ -1,6 +1,6 @@
-from base import RecipeUtilPager
+from .base import RecipeUtilPager
 
-from collection.manager import RECIPE_PROJECTION, RECIPE_INFO_PROJECTION
+from ..collection.manager import RECIPE_PROJECTION, RECIPE_INFO_PROJECTION
 
 class RecipeList(RecipeUtilPager, object):
 
