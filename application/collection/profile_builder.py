@@ -29,7 +29,9 @@ class ProfileBuilder(object):
         elif data.xpath("//*[@typeof='Recipe']"):
             self.extract_method = "RDFa"
             self.fields = self.get_html_fields(data.xpath("//*[@typeof='Recipe']"), "property")
-        else:
+
+        if self.fields is None:
+            self.fields = [ ]
             self.extract_method = None
 
         prefixes = set()
@@ -62,7 +64,7 @@ class ProfileBuilder(object):
                 continue
             if not isinstance(recipe, dict):
                 continue
-            if recipe["@type"] != "Recipe":
+            if recipe.get("@type") != "Recipe":
                 continue
             return [ key for key in recipe.keys() if not re.match("@", key) ]
 

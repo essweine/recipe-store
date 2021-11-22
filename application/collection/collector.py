@@ -252,7 +252,7 @@ class Collector(object):
         self.logger.debug("Validating %s" % record["url"])
 
         # Remove empty fields
-        for field in record.keys():
+        for field in list(record.keys()):
             if record[field] in [ None, "", [ ], { } ]:
                 del record[field]
 
